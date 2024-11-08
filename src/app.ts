@@ -1,15 +1,14 @@
 import express, { Request, Response } from "express";
 import url from "./url";
-import { authenticateJWT } from "./middleware/jwt.middleware";
+import { authenticateJWT } from "./middleware/jwt.auth";
 import response from "./utils/response.api";
-import rateLimit from "express-rate-limit";
+import { limiter, blockIPMiddleware } from "./middleware/rete.limiter";
+
+
 
 const app = express();
-const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, 
-    max: 10, 
-    message: 'Too many requests from this IP, please try again later.',
-});
+
+app.use(blockIPMiddleware);
 
 app.use(limiter);
 
