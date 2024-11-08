@@ -7,28 +7,31 @@ const blockedIPs: Set<string> = new Set();
 const isBlocked = (ip: string): boolean => blockedIPs.has(ip);
 
 const handler = (req: Request, res: Response, next: NextFunction) => {
-  const ip = req.ip;
-
-  if (typeof ip === 'string') {
-    if (isBlocked(ip)) {
-      return;
+    const ip = req.ip;
+  
+    if (typeof ip === 'string') {
+      if (isBlocked(ip)) {
+        return;
+      }
+  
+      let violationCount = (req.app.get(ip) || 0) + 1;
+      req.app.set(ip, violationCount);
+  
+      if (violationCount >= 5) {
+        blockedIPs.add(ip);
+        console.log(`IP ${ip} has been blocked because of 5 violations.`);
+        return res.status(403).json({
+          message: 'IP address is blocked.',
+        });
+      }
     }
-
-    let violationCount = (req.app.get(ip) || 0) + 1;
-    req.app.set(ip, violationCount);
-
-    if (violationCount >= 5) {
-      blockedIPs.add(ip);
-      console.log(`IP ${ip} telah diblokir karena 5 pelanggaran.`);
-    }
-  }
-
-  next();
-};
-
+  
+    next();
+  };
+  
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 10,
+  max:15,
   message: 'Too many requests from this IP, please try again later.',
   handler: handler,
 });
