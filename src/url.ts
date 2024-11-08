@@ -3,6 +3,6 @@ import auth from "./module/auth/auth.controller";
 
 const url = express();
 
-// url.use("/", auth);
+url.use("/", auth);
 
 export default url
