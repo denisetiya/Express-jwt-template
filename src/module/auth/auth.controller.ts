@@ -2,6 +2,7 @@ import  { Router,Request, Response } from "express";
 import response from "../../utils/response.api";
 // import admin from "../../config/firbase-admin.conf";
 import AuthService from "./auth.service";
+import handleValidationError from "../../utils/validation.error";
 import { iLogin, loginSchema, registerSchema, iRegister } from "../../types/auth";
 const auth: Router = Router();
 
@@ -38,11 +39,7 @@ auth.post("/auth/register", async(req: Request, res: Response) => {
     const validateData = registerSchema.safeParse(userData);
 
     if (!validateData.success) {
-        const errors = validateData.error.errors.map(err => ({
-            path: err.path.join('.'),
-            message: err.message
-        }));
-        return response(res, 400, "Bad Request", errors);
+        return handleValidationError(validateData, res);
     }
 
     try {
