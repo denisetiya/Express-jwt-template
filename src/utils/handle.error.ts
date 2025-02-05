@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 
 import { z } from "zod";
 
-const isError = (error: any) => {
+const throwError = (error: any) => {
   console.error("Error:", error);
 
   // Penanganan error dari token otentikasi
@@ -119,4 +119,4 @@ const isError = (error: any) => {
   };
 };
 
-export default isError;
+export default throwError;
