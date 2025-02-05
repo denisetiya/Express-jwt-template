@@ -35,7 +35,6 @@ const auth: Router = Router();
 
 auth.post("/auth/register", async(req: Request, res: Response) => {
     const userData :iRegister = req.body;
-    const type = req.params.type as string;
     const validateData = registerSchema.safeParse(userData);
 
     if (!validateData.success) {
@@ -49,7 +48,7 @@ auth.post("/auth/register", async(req: Request, res: Response) => {
     try {
 
 
-        const newUser = await AuthService.createNewUserByEmail(userData, type);
+        const newUser = await AuthService.createNewUserByEmail(userData);
 
         if (!newUser?.data) {
             return response(res, newUser?.status as number, "failed register", newUser?.error);

@@ -13,7 +13,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET as string;
 
 
 export default class AuthService {
-    static async createNewUserByEmail(userData: iRegister, type : string) {
+    static async createNewUserByEmail(userData: iRegister) {
         try {
 
             const existingUser = await prisma.user.findUnique({ where: { email: userData.email } });

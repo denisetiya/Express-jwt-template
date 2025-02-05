@@ -27,6 +27,6 @@
     "lib": ["es2022"]
   },
     "include": [
-      "src/**/*.ts",
+      "src/**/*.ts", "src/middleware/rate.limiter.ts",
   ]
 }

@@ -2,15 +2,15 @@ import express, { Request, Response } from "express";
 import router from "./router";
 import { authenticateJWT } from "./middleware/jwt.auth";
 import response from "./utils/response.api";
-import { limiter, blockIPMiddleware } from "./middleware/rete.limiter";
+// import { limiter, blockIPMiddleware } from "./middleware/rete.limiter.ts";
 
 
 
 const app = express();
 
-app.use(blockIPMiddleware);
+// app.use(blockIPMiddleware);
 
-app.use(limiter);
+// app.use(limiter);
 
 app.use(express.json());
 
