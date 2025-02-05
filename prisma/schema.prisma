@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,28 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id            String @id @default(auto()) @db.ObjectId @map("_id")
-  email         String @unique
-  activated        Boolean @default(false)
-  activationCode   String?
-  password      String
-  role          String @default("user")
-  tokenRef      Token?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  email          String   @unique
+  activated      Boolean  @default(false)
+  activationCode String?
+  password       String
+  role           String   @default("user")
+  tokenRef       Token?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Token {
-  id            String @id @default(auto()) @db.ObjectId @map("_id")
-  refreshToken  String  @unique
-  userId        String  @db.ObjectId @unique
-  user          User @relation(fields: [userId], references: [id])
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  refreshToken String   @unique
+  userId       String   @unique @db.ObjectId
+  user         User     @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
-
-
-

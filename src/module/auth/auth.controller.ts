@@ -1,6 +1,6 @@
 import  { Router,Request, Response } from "express";
 import response from "../../utils/response.api";
-import admin from "../../config/firbase-admin.conf";
+// import admin from "../../config/firbase-admin.conf";
 import AuthService from "./auth.service";
 import { iLogin, loginSchema, registerSchema, iRegister } from "../../types/auth";
 const auth: Router = Router();
@@ -35,7 +35,6 @@ const auth: Router = Router();
 
 auth.post("/auth/register", async(req: Request, res: Response) => {
     const userData :iRegister = req.body;
-    const type = req.params.type as string;
     const validateData = registerSchema.safeParse(userData);
 
     if (!validateData.success) {
@@ -49,7 +48,7 @@ auth.post("/auth/register", async(req: Request, res: Response) => {
     try {
 
 
-        const newUser = await AuthService.createNewUserByEmail(userData, type);
+        const newUser = await AuthService.createNewUserByEmail(userData);
 
         if (!newUser?.data) {
             return response(res, newUser?.status as number, "failed register", newUser?.error);
@@ -83,14 +82,14 @@ auth.post("/auth/login", async(req: Request, res: Response) => {
         if (!user?.data) {
             return response(res, user?.status as number, "failed login", user?.error);
         }
-        res.cookie("accessToken", user?.data.tokens.accessToken, {
+        res.cookie("accessToken", user.data.tokens?.accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production" ? true : false,
             sameSite: "none",
             maxAge: 15 * 60 * 1000
         })
 
-        res.cookie("refreshToken", user?.data.tokens.refreshToken, {
+        res.cookie("refreshToken", user.data.tokens?.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production" ? true : false,
             sameSite: "none",
